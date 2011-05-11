@@ -1,8 +1,15 @@
 name: GrowingOre
-main: net.gamesketch.bukkit.bot.growingore.core
-version: 0.0.1
+main: net.gamesketch.bukkit.growingore.core
+version: 0.4
 website: http://www.gamesketch.net
-author: The GameSketch Community
+author: Streammz
 description: >
              Makes specific ores respawn.
 commands:
+  ore:
+    description: Growing ores
+    usage: |
+           /<command> add [blockid] [minutes]
+           /<command> remove [radius]
+           /<command> count [radius]
+           /<command> select [none/radius <radius>]
