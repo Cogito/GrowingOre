@@ -1,5 +1,5 @@
 name: GrowingOre
-main: net.gamesketch.bukkit.growingore.core
+main: net.gamesketch.bukkit.growingore.Core
 version: 0.4
 website: http://www.gamesketch.net
 author: Streammz

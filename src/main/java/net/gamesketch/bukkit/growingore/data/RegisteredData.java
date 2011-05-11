@@ -9,7 +9,7 @@ import java.io.IOException;
 
 import org.bukkit.block.Block;
 
-import net.gamesketch.bukkit.growingore.core;
+import net.gamesketch.bukkit.growingore.Core;
 import net.gamesketch.bukkit.growingore.methods.RegisteredOre;
 
 public class RegisteredData {
@@ -26,7 +26,7 @@ public class RegisteredData {
 			y = Integer.parseInt(split[2]);
 			z = Integer.parseInt(split[3]);
 		
-			b = core.server.getWorld(split[0]).getBlockAt(x,y,z);
+			b = Core.server.getWorld(split[0]).getBlockAt(x,y,z);
 			oreid = Integer.parseInt(split[4]);
 			interval = Integer.parseInt(split[5]);
 			
@@ -62,7 +62,7 @@ public class RegisteredData {
 			String s;
 			while ((s = in.readLine()) != null) {
 				if (StringToData(s) != null) {
-					core.REGISTEREDORES.add(StringToData(s));
+					Core.REGISTEREDORES.add(StringToData(s));
 				} else { System.out.println("[GrowingOre] Failed data in registered.data file"); }
 			}
 			in.close();
@@ -77,7 +77,7 @@ public class RegisteredData {
 		}
 		try {
 			BufferedWriter out = new BufferedWriter(new FileWriter(file));
-			for (RegisteredOre ore : core.REGISTEREDORES) {
+			for (RegisteredOre ore : Core.REGISTEREDORES) {
 				out.write(DataToString(ore));
 				out.newLine();
 			}

@@ -3,7 +3,7 @@ package net.gamesketch.bukkit.growingore.methods;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import net.gamesketch.bukkit.growingore.core;
+import net.gamesketch.bukkit.growingore.Core;
 
 import org.bukkit.block.Block;
 
@@ -21,7 +21,7 @@ public class TempOre {
 	}};
 	TimerTask stoneTask = new TimerTask() { public void run() {
 		block.setTypeId(1);
-		core.TEMPORES.remove(thisOre);
+		Core.TEMPORES.remove(thisOre);
 		this.cancel();
 	}};
 	

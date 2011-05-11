@@ -21,7 +21,7 @@ public class CommandHandler {
 			if (args.length < 1) { return "False arguments"; }
 			if (args[0].equals("add")) {
 				if (!p.isOp()) { return "You don't have the permissions to use this command"; }
-				PlayerData pd = core.getPlayerData(p);
+				PlayerData pd = Core.getPlayerData(p);
 				int itemid;
 				int minutes;
 				
@@ -41,14 +41,14 @@ public class CommandHandler {
 				if (!p.isOp()) { return "You don't have the permissions to use this command"; }
 				
 				int radius;
-				int startSize = core.REGISTEREDORES.size();
+				int startSize = Core.REGISTEREDORES.size();
 				
 				if (args.length < 2) { return "Use the format `/ore remove <radius>"; }
 				try { radius = Integer.parseInt(args[1]); }
 				catch (NumberFormatException e) { return "Number excepted, String given"; }
 				
 				List<RegisteredOre> removes = new ArrayList<RegisteredOre>();
-				for (RegisteredOre ore : core.REGISTEREDORES) {
+				for (RegisteredOre ore : Core.REGISTEREDORES) {
 					if (ore.getBlock().getLocation().toVector().distance(p.getLocation().toVector()) <= radius) {
 						ore.deactivateTimers();
 						removes.add(ore);
@@ -56,9 +56,9 @@ public class CommandHandler {
 					}
 				}
 				for (RegisteredOre ore : removes) {
-					core.REGISTEREDORES.remove(ore);
+					Core.REGISTEREDORES.remove(ore);
 				}
-				p.sendMessage(ChatColor.GREEN + "Removed " + (startSize - core.REGISTEREDORES.size()) + " ores in " + radius + " radius.");
+				p.sendMessage(ChatColor.GREEN + "Removed " + (startSize - Core.REGISTEREDORES.size()) + " ores in " + radius + " radius.");
 				return "";
 			}
 			if (args[0].equals("count")) {
@@ -71,7 +71,7 @@ public class CommandHandler {
 				try { radius = Integer.parseInt(args[1]); }
 				catch (NumberFormatException e) { return "Number excepted, String given"; }
 				
-				for (RegisteredOre ore : core.REGISTEREDORES) {
+				for (RegisteredOre ore : Core.REGISTEREDORES) {
 					if (ore.getBlock().getLocation().toVector().distance(p.getLocation().toVector()) <= radius) {
 						startSize += 1;
 					}
@@ -82,7 +82,7 @@ public class CommandHandler {
 			if (args[0].equals("select")) {
 				if (args.length < 2) { return "Wrong arguments"; }
 				if (args[1].equals("none")) {
-					PlayerData pd = core.getPlayerData(p);
+					PlayerData pd = Core.getPlayerData(p);
 					if (pd.getSelectedBlocks().size() >= 1) { 
 						for (SelectedOre ore : pd.getSelectedBlocks()) {
 							ore.restore();
@@ -109,9 +109,9 @@ public class CommandHandler {
 					oreIDs.add(Material.LAPIS_ORE);
 
 					List<Block> blocks = Area.getBlocks(p.getWorld().getBlockAt(p.getLocation()), radius, oreIDs);
-					PlayerData pd = core.getPlayerData(p);
+					PlayerData pd = Core.getPlayerData(p);
 					for (Block b : blocks) {
-						if (core.getRegisteredOre(b) != null) { continue; }
+						if (Core.getRegisteredOre(b) != null) { continue; }
 						pd.addSelectedBlock(b);
 					}
 					p.sendMessage(ChatColor.GREEN + "Selected " + blocks.size() + " new blocks in " + radius + " radius. (" + pd.getSelectedBlocks().size() + " total)");

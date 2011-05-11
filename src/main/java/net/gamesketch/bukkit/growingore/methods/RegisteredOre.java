@@ -3,7 +3,7 @@ package net.gamesketch.bukkit.growingore.methods;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import net.gamesketch.bukkit.growingore.core;
+import net.gamesketch.bukkit.growingore.Core;
 
 import org.bukkit.block.Block;
 
@@ -56,7 +56,7 @@ public class RegisteredOre {
 			oreTimer = new Timer();
 			oreTask = new TimerTask() { public void run() {
 				b.setTypeId(itemid);
-				core.growNear(b, itemid, 1);
+				Core.growNear(b, itemid, 1);
 				oreTask.cancel(); oreTimer.cancel();
 				oreTask = null; oreTimer = null;
 			}};
@@ -92,7 +92,7 @@ public class RegisteredOre {
 		
 		oreTask = new TimerTask() { public void run() {
 			b.setTypeId(itemid);
-			core.growNear(b, itemid, 15);
+			Core.growNear(b, itemid, 15);
 			oreTask.cancel(); oreTimer.cancel();
 			oreTask = null; oreTimer = null;
 		}};

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.gamesketch.bukkit.growingore.data.RegisteredData;
-import net.gamesketch.bukkit.growingore.listeners.block;
+import net.gamesketch.bukkit.growingore.listeners.GOBlockListener;
 import net.gamesketch.bukkit.growingore.methods.PlayerData;
 import net.gamesketch.bukkit.growingore.methods.RegisteredOre;
 import net.gamesketch.bukkit.growingore.methods.TempOre;
@@ -24,10 +24,10 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class core extends JavaPlugin {
-	PlayerListener playerListener = new player();
-	BlockListener blockListener = new block();
-	EntityListener entityListener = new entity();
+public class Core extends JavaPlugin {
+	PlayerListener playerListener = new GOPlayerListener();
+	BlockListener blockListener = new GOBlockListener();
+	EntityListener entityListener = new GOEntityListener();
 	
 	//Lists of data
 	public static List<PlayerData> PLAYERDATA;
@@ -137,7 +137,7 @@ public class core extends JavaPlugin {
 				if (cur.getTypeId() == 1) {
 					if ((Math.random() * 1000) <= percent) {
 						cur.setTypeId(blockID); 
-						core.TEMPORES.add(new TempOre(cur));
+						Core.TEMPORES.add(new TempOre(cur));
 					}
 				}
 			}

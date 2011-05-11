@@ -3,7 +3,7 @@ package net.gamesketch.bukkit.growingore.methods;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.gamesketch.bukkit.growingore.core;
+import net.gamesketch.bukkit.growingore.Core;
 
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -50,7 +50,7 @@ public class PlayerData {
 			ore = null;
 		}
 		selectedOres.clear();
-		core.PLAYERDATA.remove(this);
+		Core.PLAYERDATA.remove(this);
 	}
 	
 }
