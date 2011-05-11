@@ -62,7 +62,7 @@ public class RegisteredData {
 			String s;
 			while ((s = in.readLine()) != null) {
 				if (StringToData(s) != null) {
-					Core.REGISTEREDORES.add(StringToData(s));
+					Core.getRegisteredOresList().add(StringToData(s));
 				} else { System.out.println("[GrowingOre] Failed data in registered.data file"); }
 			}
 			in.close();
@@ -77,7 +77,7 @@ public class RegisteredData {
 		}
 		try {
 			BufferedWriter out = new BufferedWriter(new FileWriter(file));
-			for (RegisteredOre ore : Core.REGISTEREDORES) {
+			for (RegisteredOre ore : Core.getRegisteredOresList()) {
 				out.write(DataToString(ore));
 				out.newLine();
 			}

@@ -5,6 +5,8 @@ import java.util.List;
 
 import net.gamesketch.bukkit.growingore.data.RegisteredData;
 import net.gamesketch.bukkit.growingore.listeners.GOBlockListener;
+import net.gamesketch.bukkit.growingore.listeners.GOEntityListener;
+import net.gamesketch.bukkit.growingore.listeners.GOPlayerListener;
 import net.gamesketch.bukkit.growingore.methods.PlayerData;
 import net.gamesketch.bukkit.growingore.methods.RegisteredOre;
 import net.gamesketch.bukkit.growingore.methods.TempOre;
@@ -25,14 +27,15 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Core extends JavaPlugin {
-	PlayerListener playerListener = new GOPlayerListener();
-	BlockListener blockListener = new GOBlockListener();
-	EntityListener entityListener = new GOEntityListener();
-	
+
+	private GOPlayerListener playerListener;
+	private GOBlockListener blockListener;
+	private GOEntityListener entityListener;
+
 	//Lists of data
-	public static List<PlayerData> PLAYERDATA;
-	public static List<RegisteredOre> REGISTEREDORES;
-	public static List<TempOre> TEMPORES;
+	private List<PlayerData> playerData;
+	private List<RegisteredOre> registeredOres;
+	private List<TempOre> tempOres;
 	
 	//Reference for server();
 	public static Server server;
@@ -42,31 +45,35 @@ public class Core extends JavaPlugin {
 		RegisteredData.Save();
 		
 		//Clear all timers
-		for (RegisteredOre ore : REGISTEREDORES) {
+		for (RegisteredOre ore : registeredOres) {
 			ore.deactivateTimers();
 		}
-		System.out.println("[GrowingOre] Saved " + REGISTEREDORES.size() + " ores to regrow.");
+		System.out.println("[GrowingOre] Saved " + registeredOres.size() + " ores to regrow.");
 		
 		//remove all temp ores
-		for (TempOre ore : TEMPORES) {
+		for (TempOre ore : tempOres) {
 			ore.getBlock().setTypeId(1);
 		}
-		System.out.println("[GrowingOre] Restored " + TEMPORES.size() + " temp ores to stone.");
+		System.out.println("[GrowingOre] Restored " + tempOres.size() + " temp ores to stone.");
 	}
 
 	public void onEnable() {
 		//Reference for server();
 		server = getServer();
 		//Initalize the lists of data
-		PLAYERDATA = new ArrayList<PlayerData>();
-		REGISTEREDORES = new ArrayList<RegisteredOre>();
-		TEMPORES = new ArrayList<TempOre>();
+		playerData = new ArrayList<PlayerData>();
+		registeredOres = new ArrayList<RegisteredOre>();
+		tempOres = new ArrayList<TempOre>();
 		
 		//Load data
 		RegisteredData.Load();
-		System.out.println("[GrowingOre] Loaded " + REGISTEREDORES.size() + " ores to regrow.");
+		System.out.println("[GrowingOre] Loaded " + registeredOres.size() + " ores to regrow.");
 		
-		//Register events
+		//Register listeners and events
+		playerListener = new GOPlayerListener(this);
+		blockListener = new GOBlockListener(this);
+		entityListener = new GOEntityListener(this);
+
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvent(Event.Type.PLAYER_INTERACT, this.playerListener, Event.Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_QUIT, this.playerListener, Event.Priority.Normal, this);
@@ -78,7 +85,7 @@ public class Core extends JavaPlugin {
 		System.out.println(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
 
 	}
-	  
+
 	public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
 	    String commandName = command.getName().toLowerCase();
 	    if (sender instanceof Player) { } else { return true; }
@@ -92,25 +99,35 @@ public class Core extends JavaPlugin {
 	    return true;
 	    
 	}
-	
-	public static PlayerData getPlayerData(Player p) {
-		for (PlayerData dat : PLAYERDATA) {
+
+	public List<PlayerData> getPlayerDataList() {
+		return playerData;
+	}
+
+	public PlayerData getPlayerData(Player p) {
+		for (PlayerData dat : playerData) {
 			if (dat.getPlayer().getName().equals(p.getName())) {
 				return dat;
 			}
 		}
 		PlayerData pd = new PlayerData(p);
-		PLAYERDATA.add(pd);
+		playerData.add(pd);
 		return pd;
 	}
-	public static boolean isOreSelected(Block b) {
-		for (PlayerData dat : PLAYERDATA) {
+
+	public boolean isOreSelected(Block b) {
+		for (PlayerData dat : playerData) {
 			if (dat.isBlockSelected(b)) { return true; }
 		}
 		return false;
 	}
-	public static RegisteredOre getRegisteredOre(Block b) {
-		for (RegisteredOre rore : REGISTEREDORES) {
+
+	public  List<RegisteredOre> getRegisteredOresList() {
+		return registeredOres;
+	}
+
+	public RegisteredOre getRegisteredOre(Block b) {
+		for (RegisteredOre rore : registeredOres) {
 			Block ore = rore.getBlock();
 			if (ore.getX() == b.getX() && ore.getY() == b.getY() && ore.getZ() == b.getZ() && ore.getWorld().getName() == b.getWorld().getName()) {
 				return rore;
@@ -118,8 +135,13 @@ public class Core extends JavaPlugin {
 		}
 		return null;
 	}
-	public static TempOre getTemporaryOre(Block b) {
-		for (TempOre tore : TEMPORES) {
+
+	public List<TempOre> getTempOres() {
+		return tempOres;
+	}
+
+	public TempOre getTemporaryOre(Block b) {
+		for (TempOre tore : tempOres) {
 			Block ore = tore.getBlock();
 			if (ore.getX() == b.getX() && ore.getY() == b.getY() && ore.getZ() == b.getZ() && ore.getWorld().getName() == b.getWorld().getName()) {
 				return tore;
@@ -127,7 +149,8 @@ public class Core extends JavaPlugin {
 		}
 		return null;
 	}
-	public static void growNear(Block bl, int blockID, int percent) {
+
+	public void growNear(Block bl, int blockID, int percent) {
 		int a = -2;
 		int b = -2;
 		int c = -2;
@@ -137,7 +160,7 @@ public class Core extends JavaPlugin {
 				if (cur.getTypeId() == 1) {
 					if ((Math.random() * 1000) <= percent) {
 						cur.setTypeId(blockID); 
-						Core.TEMPORES.add(new TempOre(cur));
+						tempOres.add(new TempOre(cur));
 					}
 				}
 			}

@@ -41,14 +41,14 @@ public class CommandHandler {
 				if (!p.isOp()) { return "You don't have the permissions to use this command"; }
 				
 				int radius;
-				int startSize = Core.REGISTEREDORES.size();
+				int startSize = Core.getRegisteredOresList().size();
 				
 				if (args.length < 2) { return "Use the format `/ore remove <radius>"; }
 				try { radius = Integer.parseInt(args[1]); }
 				catch (NumberFormatException e) { return "Number excepted, String given"; }
 				
 				List<RegisteredOre> removes = new ArrayList<RegisteredOre>();
-				for (RegisteredOre ore : Core.REGISTEREDORES) {
+				for (RegisteredOre ore : Core.getRegisteredOresList()) {
 					if (ore.getBlock().getLocation().toVector().distance(p.getLocation().toVector()) <= radius) {
 						ore.deactivateTimers();
 						removes.add(ore);
@@ -56,9 +56,9 @@ public class CommandHandler {
 					}
 				}
 				for (RegisteredOre ore : removes) {
-					Core.REGISTEREDORES.remove(ore);
+					Core.getRegisteredOresList().remove(ore);
 				}
-				p.sendMessage(ChatColor.GREEN + "Removed " + (startSize - Core.REGISTEREDORES.size()) + " ores in " + radius + " radius.");
+				p.sendMessage(ChatColor.GREEN + "Removed " + (startSize - Core.getRegisteredOresList().size()) + " ores in " + radius + " radius.");
 				return "";
 			}
 			if (args[0].equals("count")) {
@@ -71,7 +71,7 @@ public class CommandHandler {
 				try { radius = Integer.parseInt(args[1]); }
 				catch (NumberFormatException e) { return "Number excepted, String given"; }
 				
-				for (RegisteredOre ore : Core.REGISTEREDORES) {
+				for (RegisteredOre ore : Core.getRegisteredOresList()) {
 					if (ore.getBlock().getLocation().toVector().distance(p.getLocation().toVector()) <= radius) {
 						startSize += 1;
 					}

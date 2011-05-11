@@ -11,6 +11,13 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class GOPlayerListener extends PlayerListener {
 
+	private Core plugin;
+
+	public GOPlayerListener(Core plugin) {
+		super();
+		this.plugin = plugin;
+	}
+
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		if (event.isCancelled()) { return; } //check if event is cancelled
 		if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) { return; }  //check if the interact is a right-click-block
@@ -19,13 +26,13 @@ public class GOPlayerListener extends PlayerListener {
 		if (!event.getPlayer().getItemInHand().getType().equals(Material.SEEDS)) { return; } //check if the item in hand are seeds
 		
 
-		if (Core.getRegisteredOre(event.getClickedBlock()) != null) {
+		if (plugin.getRegisteredOre(event.getClickedBlock()) != null) {
 			event.getPlayer().sendMessage("This ore is already registered"); 
 			return;
 		}
 		
-		if (!Core.isOreSelected(event.getClickedBlock())) {
-			PlayerData playerData = Core.getPlayerData(event.getPlayer());
+		if (!plugin.isOreSelected(event.getClickedBlock())) {
+			PlayerData playerData = plugin.getPlayerData(event.getPlayer());
 			playerData.addSelectedBlock(event.getClickedBlock());
 			event.getPlayer().sendMessage("Added block (" + event.getClickedBlock().getX() + "," + event.getClickedBlock().getY() + "," + event.getClickedBlock().getZ() + ") to your selection (" + playerData.getSelectedBlocks().size() + " total)");
 		} else {
@@ -34,9 +41,6 @@ public class GOPlayerListener extends PlayerListener {
 	}
 	
 	public void onPlayerQuit(PlayerQuitEvent event) { //remove playerdata if player leaves
-		Core.getPlayerData(event.getPlayer()).remove();
+		plugin.getPlayerData(event.getPlayer()).remove();
 	}
-
-	
-		
 }

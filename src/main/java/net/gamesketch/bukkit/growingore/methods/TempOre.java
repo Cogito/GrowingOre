@@ -21,7 +21,7 @@ public class TempOre {
 	}};
 	TimerTask stoneTask = new TimerTask() { public void run() {
 		block.setTypeId(1);
-		Core.TEMPORES.remove(thisOre);
+		Core.getTempOres().remove(thisOre);
 		this.cancel();
 	}};
 	

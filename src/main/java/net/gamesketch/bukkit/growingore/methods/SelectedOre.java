@@ -30,7 +30,7 @@ public class SelectedOre {
 	public void register(int itemid, int minutes) {
 		this.restore();
 		RegisteredOre ore = new RegisteredOre(original, itemid, minutes);
-		Core.REGISTEREDORES.add(ore);
+		Core.getRegisteredOresList().add(ore);
 	}
 	
 }

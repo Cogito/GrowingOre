@@ -8,13 +8,20 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockListener;
 
 public class GOBlockListener extends BlockListener {
+	private Core plugin;
+
+	public GOBlockListener(Core plugin) {
+		super();
+		this.plugin = plugin;
+	}
+
 	public void onBlockBreak(BlockBreakEvent event) {
-		if (Core.getRegisteredOre(event.getBlock()) != null) {
-			RegisteredOre ore = Core.getRegisteredOre(event.getBlock());
+		if (plugin.getRegisteredOre(event.getBlock()) != null) {
+			RegisteredOre ore = plugin.getRegisteredOre(event.getBlock());
 			ore.activateTimers();
 		}
-		if (Core.getTemporaryOre(event.getBlock()) != null) {
-			TempOre ore = Core.getTemporaryOre(event.getBlock());
+		if (plugin.getTemporaryOre(event.getBlock()) != null) {
+			TempOre ore = plugin.getTemporaryOre(event.getBlock());
 			ore.startTimers();
 		}
 	}

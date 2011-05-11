@@ -26,13 +26,13 @@ public class RegisteredOre {
 		this.b = b;
 		this.itemid = id;
 		this.minutes = min;
+		this
 		
 		b.setTypeId(itemid);
 	}
+
 	public RegisteredOre(Block bl, int id, int min, long cobble, long stone, long ore) {
-		this.b = bl;
-		this.itemid = id;
-		this.minutes = min;
+		this(bl, id, min);
 		//Add timers (IF NECESERRY ,TO PREVENT RAM LEAK)
 		if (cobble > 0) {
 			cobbleTimer = new Timer();

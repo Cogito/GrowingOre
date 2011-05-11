@@ -50,7 +50,7 @@ public class PlayerData {
 			ore = null;
 		}
 		selectedOres.clear();
-		Core.PLAYERDATA.remove(this);
+		Core.getPlayerDataList().remove(this);
 	}
 	
 }
