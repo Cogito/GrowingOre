@@ -13,15 +13,16 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin; 
 
 public class CommandHandler {
 	
-	public static String handle(Player p, String command, String[] args) {
+	public static String handle(Core plugin, Player p, String command, String[] args) {
 		if (command.equals("ore")) {
 			if (args.length < 1) { return "False arguments"; }
 			if (args[0].equals("add")) {
 				if (!p.isOp()) { return "You don't have the permissions to use this command"; }
-				PlayerData pd = Core.getPlayerData(p);
+				PlayerData pd = plugin.getPlayerData(p);
 				int itemid;
 				int minutes;
 				
@@ -31,7 +32,7 @@ public class CommandHandler {
 				
 				if (pd.getSelectedBlocks().size() < 1) { return "Select some ores first with seeds as tool"; }
 				for (SelectedOre ore : pd.getSelectedBlocks()) {
-					ore.register(itemid, minutes);
+					ore.register(plugin, itemid, minutes);
 				}
 				p.sendMessage(ChatColor.GREEN + "Added " + pd.getSelectedBlocks().size() + " ores to regrow");
 				pd.getSelectedBlocks().clear();
@@ -41,14 +42,14 @@ public class CommandHandler {
 				if (!p.isOp()) { return "You don't have the permissions to use this command"; }
 				
 				int radius;
-				int startSize = Core.getRegisteredOresList().size();
+				int startSize = plugin.getRegisteredOresList().size();
 				
 				if (args.length < 2) { return "Use the format `/ore remove <radius>"; }
 				try { radius = Integer.parseInt(args[1]); }
 				catch (NumberFormatException e) { return "Number excepted, String given"; }
 				
 				List<RegisteredOre> removes = new ArrayList<RegisteredOre>();
-				for (RegisteredOre ore : Core.getRegisteredOresList()) {
+				for (RegisteredOre ore : plugin.getRegisteredOresList()) {
 					if (ore.getBlock().getLocation().toVector().distance(p.getLocation().toVector()) <= radius) {
 						ore.deactivateTimers();
 						removes.add(ore);
@@ -56,9 +57,9 @@ public class CommandHandler {
 					}
 				}
 				for (RegisteredOre ore : removes) {
-					Core.getRegisteredOresList().remove(ore);
+					plugin.getRegisteredOresList().remove(ore);
 				}
-				p.sendMessage(ChatColor.GREEN + "Removed " + (startSize - Core.getRegisteredOresList().size()) + " ores in " + radius + " radius.");
+				p.sendMessage(ChatColor.GREEN + "Removed " + (startSize - plugin.getRegisteredOresList().size()) + " ores in " + radius + " radius.");
 				return "";
 			}
 			if (args[0].equals("count")) {
@@ -71,7 +72,7 @@ public class CommandHandler {
 				try { radius = Integer.parseInt(args[1]); }
 				catch (NumberFormatException e) { return "Number excepted, String given"; }
 				
-				for (RegisteredOre ore : Core.getRegisteredOresList()) {
+				for (RegisteredOre ore : plugin.getRegisteredOresList()) {
 					if (ore.getBlock().getLocation().toVector().distance(p.getLocation().toVector()) <= radius) {
 						startSize += 1;
 					}
@@ -82,7 +83,7 @@ public class CommandHandler {
 			if (args[0].equals("select")) {
 				if (args.length < 2) { return "Wrong arguments"; }
 				if (args[1].equals("none")) {
-					PlayerData pd = Core.getPlayerData(p);
+					PlayerData pd = plugin.getPlayerData(p);
 					if (pd.getSelectedBlocks().size() >= 1) { 
 						for (SelectedOre ore : pd.getSelectedBlocks()) {
 							ore.restore();
@@ -109,9 +110,9 @@ public class CommandHandler {
 					oreIDs.add(Material.LAPIS_ORE);
 
 					List<Block> blocks = Area.getBlocks(p.getWorld().getBlockAt(p.getLocation()), radius, oreIDs);
-					PlayerData pd = Core.getPlayerData(p);
+					PlayerData pd = plugin.getPlayerData(p);
 					for (Block b : blocks) {
-						if (Core.getRegisteredOre(b) != null) { continue; }
+						if (plugin.getRegisteredOre(b) != null) { continue; }
 						pd.addSelectedBlock(b);
 					}
 					p.sendMessage(ChatColor.GREEN + "Selected " + blocks.size() + " new blocks in " + radius + " radius. (" + pd.getSelectedBlocks().size() + " total)");

@@ -21,18 +21,18 @@ public class RegisteredOre {
 	TimerTask oreTask;
 	
 	boolean firstTime = true;
+	protected Core plugin;
 	
-	public RegisteredOre(Block b, int id, int min) {
+	public RegisteredOre(Core plugin, Block b, int id, int min) {
 		this.b = b;
 		this.itemid = id;
 		this.minutes = min;
-		this
-		
+		this.plugin = plugin;
 		b.setTypeId(itemid);
 	}
 
-	public RegisteredOre(Block bl, int id, int min, long cobble, long stone, long ore) {
-		this(bl, id, min);
+	public RegisteredOre(Core plugin2, Block bl, int id, int min, long cobble, long stone, long ore) {
+		this(plugin2, bl, id, min);
 		//Add timers (IF NECESERRY ,TO PREVENT RAM LEAK)
 		if (cobble > 0) {
 			cobbleTimer = new Timer();
@@ -56,7 +56,7 @@ public class RegisteredOre {
 			oreTimer = new Timer();
 			oreTask = new TimerTask() { public void run() {
 				b.setTypeId(itemid);
-				Core.growNear(b, itemid, 1);
+				plugin.growNear(b, itemid, 1);
 				oreTask.cancel(); oreTimer.cancel();
 				oreTask = null; oreTimer = null;
 			}};
@@ -92,7 +92,7 @@ public class RegisteredOre {
 		
 		oreTask = new TimerTask() { public void run() {
 			b.setTypeId(itemid);
-			Core.growNear(b, itemid, 15);
+			plugin.growNear(b, itemid, 15);
 			oreTask.cancel(); oreTimer.cancel();
 			oreTask = null; oreTimer = null;
 		}};

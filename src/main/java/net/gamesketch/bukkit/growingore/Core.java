@@ -42,7 +42,7 @@ public class Core extends JavaPlugin {
 	
 	public void onDisable() {
 		//Save all data
-		RegisteredData.Save();
+		RegisteredData.save(this);
 		
 		//Clear all timers
 		for (RegisteredOre ore : registeredOres) {
@@ -66,7 +66,7 @@ public class Core extends JavaPlugin {
 		tempOres = new ArrayList<TempOre>();
 		
 		//Load data
-		RegisteredData.Load();
+		RegisteredData.load(this);
 		System.out.println("[GrowingOre] Loaded " + registeredOres.size() + " ores to regrow.");
 		
 		//Register listeners and events
@@ -91,7 +91,7 @@ public class Core extends JavaPlugin {
 	    if (sender instanceof Player) { } else { return true; }
 	    Player player = (Player)sender;
 	    
-	    String result = CommandHandler.handle(player, commandName, args);
+	    String result = CommandHandler.handle(this, player, commandName, args);
 	    if (result.length() > 1) {
 	    	player.sendMessage(ChatColor.RED + "[ERROR: " + result + "]");
 	    	return false; 
@@ -160,7 +160,7 @@ public class Core extends JavaPlugin {
 				if (cur.getTypeId() == 1) {
 					if ((Math.random() * 1000) <= percent) {
 						cur.setTypeId(blockID); 
-						tempOres.add(new TempOre(cur));
+						tempOres.add(new TempOre(this, cur));
 					}
 				}
 			}

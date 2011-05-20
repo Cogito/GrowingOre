@@ -41,6 +41,6 @@ public class GOPlayerListener extends PlayerListener {
 	}
 	
 	public void onPlayerQuit(PlayerQuitEvent event) { //remove playerdata if player leaves
-		plugin.getPlayerData(event.getPlayer()).remove();
+		plugin.getPlayerData(event.getPlayer()).remove(plugin);
 	}
 }

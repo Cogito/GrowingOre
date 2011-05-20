@@ -44,13 +44,13 @@ public class PlayerData {
 		return selectedOres;
 	}
 	
-	public void remove() {
+	public void remove(Core plugin) {
 		for (SelectedOre ore : selectedOres) {
 			ore.restore();
 			ore = null;
 		}
 		selectedOres.clear();
-		Core.getPlayerDataList().remove(this);
+		plugin.getPlayerDataList().remove(this);
 	}
 	
 }

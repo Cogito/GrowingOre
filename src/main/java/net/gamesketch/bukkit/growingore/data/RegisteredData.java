@@ -16,7 +16,7 @@ public class RegisteredData {
 	static File file = new File("plugins/growingore/registered.data");
 	static File folder = new File("plugins/growingore/");
 	
-	public static RegisteredOre StringToData(String data) {
+	public static RegisteredOre stringToData(Core plugin, String data) {
 		String[] split = data.split(":");
 		int x, y, z, oreid, interval;
 		long cobble, stone, ore;
@@ -34,7 +34,7 @@ public class RegisteredData {
 			stone = Long.parseLong(split[7]);
 			ore = Long.parseLong(split[8]);
 		} catch (NumberFormatException e) { return null; }
-		return new RegisteredOre(b,oreid,interval,cobble,stone,ore);
+		return new RegisteredOre(plugin,b,oreid,interval,cobble,stone, ore);
 	}
 	public static String DataToString(RegisteredOre ore) {
 		//world:x:y:z:oreID:interval:cobbleTimeLeft:stoneTimeLeft:oreTimeLeft
@@ -49,7 +49,7 @@ public class RegisteredData {
 		String a10 = "" + ore.getOreTimeLeft();
 		return a1 + ":" + a2 + ":" + a3 + ":" + a4 + ":" + a6 + ":" + a7 + ":" + a8 + ":" + a9 + ":" + a10;
 	}
-	public static void Load() {
+	public static void load(Core plugin) {
 		if (!file.exists()) {
 			try {
 				folder.mkdirs();
@@ -61,14 +61,14 @@ public class RegisteredData {
 			BufferedReader in = new BufferedReader(new FileReader(file));
 			String s;
 			while ((s = in.readLine()) != null) {
-				if (StringToData(s) != null) {
-					Core.getRegisteredOresList().add(StringToData(s));
+				if (stringToData(plugin, s) != null) {
+					plugin.getRegisteredOresList().add(stringToData(plugin, s));
 				} else { System.out.println("[GrowingOre] Failed data in registered.data file"); }
 			}
 			in.close();
 		} catch (IOException e) { return; }
 	}
-	public static void Save() {
+	public static void save(Core plugin) {
 		if (!file.exists()) {
 			try {
 				folder.mkdirs();
@@ -77,7 +77,7 @@ public class RegisteredData {
 		}
 		try {
 			BufferedWriter out = new BufferedWriter(new FileWriter(file));
-			for (RegisteredOre ore : Core.getRegisteredOresList()) {
+			for (RegisteredOre ore : plugin.getRegisteredOresList()) {
 				out.write(DataToString(ore));
 				out.newLine();
 			}

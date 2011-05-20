@@ -27,10 +27,10 @@ public class SelectedOre {
 		original.setData(origbyte);
 	}
 	
-	public void register(int itemid, int minutes) {
+	public void register(Core plugin, int itemid, int minutes) {
 		this.restore();
-		RegisteredOre ore = new RegisteredOre(original, itemid, minutes);
-		Core.getRegisteredOresList().add(ore);
+		RegisteredOre ore = new RegisteredOre(plugin, original, itemid, minutes);
+		plugin.getRegisteredOresList().add(ore);
 	}
 	
 }

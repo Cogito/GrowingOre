@@ -9,23 +9,26 @@ import org.bukkit.block.Block;
 
 public class TempOre {
 	Block block;
-	
+
 	Timer cobbleTimer = new Timer();
 	Timer stoneTimer = new Timer();
-	
+
 	TempOre thisOre = this;
-	
+
+	protected Core plugin;
+
 	TimerTask cobbleTask = new TimerTask() { public void run() {
 		block.setTypeId(4);
 		this.cancel();
 	}};
+
 	TimerTask stoneTask = new TimerTask() { public void run() {
 		block.setTypeId(1);
-		Core.getTempOres().remove(thisOre);
+		plugin.getTempOres().remove(thisOre);
 		this.cancel();
 	}};
 	
-	public TempOre(Block b) {
+	public TempOre(Core plugin, Block b) {
 		this.block = b;
 	}
 	public Block getBlock() {
