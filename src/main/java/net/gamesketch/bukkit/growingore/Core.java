@@ -13,6 +13,7 @@ import net.gamesketch.bukkit.growingore.methods.TempOre;
 import net.gamesketch.bukkit.growingore.listeners.*;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
@@ -52,7 +53,7 @@ public class Core extends JavaPlugin {
 		
 		//remove all temp ores
 		for (TempOre ore : tempOres) {
-			ore.getBlock().setTypeId(1);
+			ore.getBlock().setType(Material.STONE);//.setTypeId(1);
 		}
 		System.out.println("[GrowingOre] Restored " + tempOres.size() + " temp ores to stone.");
 	}

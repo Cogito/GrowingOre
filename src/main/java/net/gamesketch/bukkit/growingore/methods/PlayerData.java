@@ -25,10 +25,11 @@ public class PlayerData {
 	
 	public boolean isBlockSelected(Block b) {
 		for (SelectedOre sel : selectedOres) {
-			if (!sel.getBlock().getWorld().getName().equals(b.getWorld().getName())) { continue; }
-			if (sel.getBlock().getX() != b.getX()) { continue; }
-			if (sel.getBlock().getY() != b.getY()) { continue; }
-			if (sel.getBlock().getZ() != b.getZ()) { continue; }
+			Block block = sel.getBlock();
+			if (!block.getWorld().getName().equals(b.getWorld().getName())) { continue; }
+			if (block.getX() != b.getX()) { continue; }
+			if (block.getY() != b.getY()) { continue; }
+			if (block.getZ() != b.getZ()) { continue; }
 			return true;
 		}
 		return false;

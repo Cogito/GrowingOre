@@ -5,6 +5,7 @@ import java.util.TimerTask;
 
 import net.gamesketch.bukkit.growingore.Core;
 
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 
 public class TempOre {
@@ -18,12 +19,12 @@ public class TempOre {
 	protected Core plugin;
 
 	TimerTask cobbleTask = new TimerTask() { public void run() {
-		block.setTypeId(4);
+		block.setType(Material.COBBLESTONE);//.setTypeId(4);
 		this.cancel();
 	}};
 
 	TimerTask stoneTask = new TimerTask() { public void run() {
-		block.setTypeId(1);
+		block.setType(Material.STONE);//.setTypeId(1);
 		plugin.getTempOres().remove(thisOre);
 		this.cancel();
 	}};

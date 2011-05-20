@@ -38,28 +38,30 @@ public class CommandHandler {
 				pd.getSelectedBlocks().clear();
 				return "";
 			}
+			List<RegisteredOre> registeredOresList = plugin.getRegisteredOresList();
 			if (args[0].equals("remove")) {
 				if (!p.isOp()) { return "You don't have the permissions to use this command"; }
 				
 				int radius;
-				int startSize = plugin.getRegisteredOresList().size();
+				int startSize = registeredOresList.size();
 				
 				if (args.length < 2) { return "Use the format `/ore remove <radius>"; }
 				try { radius = Integer.parseInt(args[1]); }
 				catch (NumberFormatException e) { return "Number excepted, String given"; }
 				
 				List<RegisteredOre> removes = new ArrayList<RegisteredOre>();
-				for (RegisteredOre ore : plugin.getRegisteredOresList()) {
-					if (ore.getBlock().getLocation().toVector().distance(p.getLocation().toVector()) <= radius) {
+				for (RegisteredOre ore : registeredOresList) {
+					Block block = ore.getBlock();
+					if (distanceBetween(p, block) <= radius) {
 						ore.deactivateTimers();
 						removes.add(ore);
-						ore.getBlock().setTypeId(1);
+						block.setType(Material.STONE);//.setTypeId(1);
 					}
 				}
 				for (RegisteredOre ore : removes) {
-					plugin.getRegisteredOresList().remove(ore);
+					registeredOresList.remove(ore);
 				}
-				p.sendMessage(ChatColor.GREEN + "Removed " + (startSize - plugin.getRegisteredOresList().size()) + " ores in " + radius + " radius.");
+				p.sendMessage(ChatColor.GREEN + "Removed " + (startSize - registeredOresList.size()) + " ores in " + radius + " radius.");
 				return "";
 			}
 			if (args[0].equals("count")) {
@@ -72,8 +74,8 @@ public class CommandHandler {
 				try { radius = Integer.parseInt(args[1]); }
 				catch (NumberFormatException e) { return "Number excepted, String given"; }
 				
-				for (RegisteredOre ore : plugin.getRegisteredOresList()) {
-					if (ore.getBlock().getLocation().toVector().distance(p.getLocation().toVector()) <= radius) {
+				for (RegisteredOre ore : registeredOresList) {
+					if (distanceBetween(p, ore.getBlock()) <= radius) {
 						startSize += 1;
 					}
 				}
@@ -109,7 +111,7 @@ public class CommandHandler {
 					oreIDs.add(Material.REDSTONE_ORE); oreIDs.add(Material.GLOWING_REDSTONE_ORE);
 					oreIDs.add(Material.LAPIS_ORE);
 
-					List<Block> blocks = Area.getBlocks(p.getWorld().getBlockAt(p.getLocation()), radius, oreIDs);
+					List<Block> blocks = Area.getBlocks(p.getLocation().getBlock(), radius, oreIDs);
 					PlayerData pd = plugin.getPlayerData(p);
 					for (Block b : blocks) {
 						if (plugin.getRegisteredOre(b) != null) { continue; }
@@ -122,6 +124,10 @@ public class CommandHandler {
 			return "Wrong parameters";
 		}
 		return "";
+	}
+
+	private static double distanceBetween(Player player, Block block) {
+		return block.getLocation().toVector().distance(player.getLocation().toVector());
 	}
 	
 }

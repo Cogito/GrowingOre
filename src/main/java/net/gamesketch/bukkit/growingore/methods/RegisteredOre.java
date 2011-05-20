@@ -5,6 +5,7 @@ import java.util.TimerTask;
 
 import net.gamesketch.bukkit.growingore.Core;
 
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 
 public class RegisteredOre {
@@ -37,7 +38,7 @@ public class RegisteredOre {
 		if (cobble > 0) {
 			cobbleTimer = new Timer();
 			cobbleTask = new TimerTask() { public void run() {
-				b.setTypeId(4);
+				b.setType(Material.COBBLESTONE);//.setTypeId(4);
 				cobbleTask.cancel(); cobbleTimer.cancel();
 				cobbleTask = null; cobbleTimer = null;
 			}};
@@ -46,7 +47,7 @@ public class RegisteredOre {
 		if (stone > 0) {
 			stoneTimer = new Timer();
 			stoneTask = new TimerTask() { public void run() {
-				b.setTypeId(1);
+				b.setType(Material.STONE);//.setTypeId(1);
 				stoneTask.cancel(); stoneTimer.cancel();
 				stoneTask = null; stoneTimer = null;
 			}};
@@ -79,13 +80,13 @@ public class RegisteredOre {
 		oreTimer = new Timer();
 		//initalize new tasks
 		cobbleTask = new TimerTask() { public void run() {
-			b.setTypeId(4);
+			b.setType(Material.COBBLESTONE);//.setTypeId(4);
 			cobbleTask.cancel(); cobbleTimer.cancel();
 			cobbleTask = null; cobbleTimer = null;
 		}};
 		
 		stoneTask = new TimerTask() { public void run() {
-			b.setTypeId(1);
+			b.setType(Material.STONE);//.setTypeId(1);
 			stoneTask.cancel(); stoneTimer.cancel();
 			stoneTask = null; stoneTimer = null;
 		}};
@@ -111,23 +112,26 @@ public class RegisteredOre {
 	}
 	public long getOreTimeLeft() {
 		if (oreTask == null) { return 0; }
-		long time = oreTask.scheduledExecutionTime() - System.currentTimeMillis();
+		long scheduledExecutionTime = oreTask.scheduledExecutionTime();
+		long time = scheduledExecutionTime - System.currentTimeMillis();
 		if (time <= 0) { time = 0; }
-		if (oreTask.scheduledExecutionTime() == 0) { time = 0; }
+		if (scheduledExecutionTime == 0) { time = 0; }
 		return time;
 	}
 	public long getStoneTimeLeft() {
 		if (stoneTask == null) { return 0; }
-		long time = stoneTask.scheduledExecutionTime() - System.currentTimeMillis();
+		long scheduledExecutionTime = stoneTask.scheduledExecutionTime();
+		long time = scheduledExecutionTime - System.currentTimeMillis();
 		if (time <= 0) { time = 0; }
-		if (stoneTask.scheduledExecutionTime() == 0) { time = 0; }
+		if (scheduledExecutionTime == 0) { time = 0; }
 		return time;
 	}
 	public long getCobbleTimeLeft() {
 		if (cobbleTask == null) { return 0; }
-		long time = cobbleTask.scheduledExecutionTime() - System.currentTimeMillis();
+		long scheduledExecutionTime = cobbleTask.scheduledExecutionTime();
+		long time = scheduledExecutionTime - System.currentTimeMillis();
 		if (time <= 0) { time = 0; }
-		if (cobbleTask.scheduledExecutionTime() == 0) { time = 0; }
+		if (scheduledExecutionTime == 0) { time = 0; }
 		return time;
 	}
 	public int getOreId() {

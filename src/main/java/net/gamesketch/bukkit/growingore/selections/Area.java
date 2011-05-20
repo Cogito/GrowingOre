@@ -39,8 +39,4 @@ public class Area {
 		
 		return result;
 	}
-
-	
-
-	
 }
